@@ -1,0 +1,25 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Fetch all history for all tags and branches
+      run: |
+        git fetch --prune --unshallow
+    - name: Install GitVersion
+      uses: gittools/actions/setup-gitversion@v0.4
+      with:
+          versionSpec: '5.1.2'
+    - name: Use GitVersion
+      id: gitversion # step id used as reference for output values
+      uses: gittools/actions/execute-gitversion@v0.4
+    - run: |
+        echo "FullSemVer: ${{ steps.gitversion.outputs.fullSemVer }}"
+
