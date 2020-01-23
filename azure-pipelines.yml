@@ -1,0 +1,21 @@
+variables: { DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 'true', DOTNET_CLI_TELEMETRY_OPTOUT: 'true' }
+
+strategy:
+  matrix:
+    linux:
+      imageName: 'ubuntu-latest'
+    mac:
+      imageName: 'macos-latest'
+    windows:
+      imageName: 'windows-latest'
+
+pool:
+  vmImage: $(imageName)
+
+steps: 
+  - task: gitversion-setup@0
+    displayName: Setup GitVersion
+    inputs:
+      versionSpec: '5.1.2'
+  - task: gitversion-execute@0
+    displayName: Execute GitVersion
