@@ -1,4 +1,9 @@
-variables: { DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 'true', DOTNET_CLI_TELEMETRY_OPTOUT: 'true' }
+variables: 
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 'true'
+  DOTNET_CLI_TELEMETRY_OPTOUT: 'true'
+  OWNER: 'arturcic'
+  REPOSITORY: 'actions-test'
+  MILESTONE: '0.1.0'
 
 strategy:
   matrix:
@@ -13,9 +18,62 @@ pool:
   vmImage: $(imageName)
 
 steps: 
-  - task: gitversion-setup@0
-    displayName: Setup GitVersion
+  - task: gitversion/setup@0
+    displayName: Install GitVersion
     inputs:
       versionSpec: '5.1.2'
-  - task: gitversion-execute@0
-    displayName: Execute GitVersion
+  - task: gitversion/execute@0
+    displayName: Use GitVersion
+  
+  - script: echo $(fullSemVer)
+
+  # - task: gitreleasemanager/setup@0
+  #   displayName: Install GitReleaseManager
+  #   inputs:
+  #     versionSpec: '0.10.x'
+  
+  # - task: gitreleasemanager/create@0
+  #   displayName: Create release with GitReleaseManager
+  #   inputs:
+  #     owner: $(OWNER)
+  #     repository: $(REPOSITORY)
+  #     token: $(GITHUB_TOKEN)
+  #     milestone: $(MILESTONE)
+  #     name: 'v$(MILESTONE)'
+  #     assets: |
+  #       src/test.txt
+  #       src/test1.txt
+    
+  # - task: gitreleasemanager/discard@0
+  #   inputs:
+  #     owner: 'someOwner'
+  #     repository: 'someRepo'
+  #     token: '$(GITHUB_TOKEN)'
+  #     milestone: '0.1.0'
+  # - task: gitreleasemanager/close@0
+  #   inputs:
+  #     owner: 'someOwner'
+  #     repository: 'someRepo'
+  #     token: '$(GITHUB_TOKEN)'
+  #     milestone: '0.1.0'
+  # - task: gitreleasemanager/open@0
+  #   inputs:
+  #     owner: 'someOwner'
+  #     repository: 'someRepo'
+  #     token: '$(GITHUB_TOKEN)'
+  #     milestone: '0.1.0'
+  # - task: gitreleasemanager/publish@0
+  #   inputs:
+  #     owner: 'someOwner'
+  #     repository: 'someRepo'
+  #     token: '$(GITHUB_TOKEN)'
+  #     tagName: '0.1.0'
+  # - task: gitreleasemanager/addasset@0
+  #   inputs:
+  #     owner: 'someOwner'
+  #     repository: 'someRepo'
+  #     token: '$(GITHUB_TOKEN)'
+  #     tagName: '0.1.0'
+  #     assets: |
+  #       src/test.txt
+  #       src/test1.txt
