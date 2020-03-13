@@ -21,11 +21,15 @@ steps:
   - task: gitversion/setup@0
     displayName: Install GitVersion
     inputs:
-      versionSpec: '5.1.2'
+      versionSpec: '5.x'
   - task: gitversion/execute@0
+    name: version
     displayName: Use GitVersion
   
-  - script: echo $(fullSemVer)
+  - script: |
+      echo "FullSemVer: $(fullSemVer)"
+      echo "FullSemVer: $(GitVersion.FullSemVer)"
+      echo "FullSemVer: $(version.GitVersion.FullSemVer)"
 
   # - task: gitreleasemanager/setup@0
   #   displayName: Install GitReleaseManager
