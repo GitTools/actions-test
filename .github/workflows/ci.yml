@@ -2,7 +2,8 @@ name: CI
 on: [push, pull_request, workflow_dispatch]
 
 jobs:
-  build:
+  GitVersion_v5:
+    name: GitVersion v5
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -16,10 +17,14 @@ jobs:
     - uses: gittools/actions/gitversion/setup@v0.12
       name: Install GitVersion
       with:
-        versionSpec: '6.x'
-        includePrerelease: true
+        versionSpec: '5.x'
+        includePrerelease: false
     - uses: gittools/actions/gitversion/execute@v0.12
       name: Use GitVersion
+      with:
+          useConfigFile: true
+          configFilePath: 'GitVersion_v5.yml'
+          additionalArguments: '/overrideconfig update-build-number=false'
       id: gitversion # step id used as reference for output values
     - run: |
         echo "FullSemVer (env.fullSemVer)                                 : ${{ env.fullSemVer }}"
@@ -27,3 +32,33 @@ jobs:
         echo "FullSemVer (steps.gitversion.outputs.fullSemVer)            : ${{ steps.gitversion.outputs.fullSemVer }}"
         echo "FullSemVer (steps.gitversion.outputs.GitVersion_FullSemVer) : ${{ steps.gitversion.outputs.GitVersion_FullSemVer }}"
       name: Use variables and output
+  GitVersion_v6:
+    name: GitVersion v6
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ windows-latest, ubuntu-latest, macos-13, macos-14 ]
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch all history for all tags and branches
+        run: |
+          git fetch --prune --unshallow
+      - uses: gittools/actions/gitversion/setup@v0.12
+        name: Install GitVersion
+        with:
+          versionSpec: '6.x'
+          includePrerelease: true
+      - uses: gittools/actions/gitversion/execute@v0.12
+        name: Use GitVersion
+        with:
+          useConfigFile: true
+          configFilePath: 'GitVersion_v6.yml'
+          additionalArguments: '/overrideconfig update-build-number=false'
+        id: gitversion # step id used as reference for output values
+      - run: |
+          echo "FullSemVer (env.fullSemVer)                                 : ${{ env.fullSemVer }}"
+          echo "FullSemVer (env.GitVersion_FullSemVer)                      : ${{ env.GitVersion_FullSemVer }}"
+          echo "FullSemVer (steps.gitversion.outputs.fullSemVer)            : ${{ steps.gitversion.outputs.fullSemVer }}"
+          echo "FullSemVer (steps.gitversion.outputs.GitVersion_FullSemVer) : ${{ steps.gitversion.outputs.GitVersion_FullSemVer }}"
+        name: Use variables and output
