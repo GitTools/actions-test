@@ -1,0 +1,148 @@
+name: same-job
+on: [ push, pull_request, workflow_dispatch ]
+
+jobs:
+  GitVersion_v5_same_job:
+    name: GitVersion v5 (same job)
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ windows-latest, ubuntu-latest, macos-13, macos-14 ]
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch all history for all tags and branches
+        run: |
+          git fetch --prune --unshallow
+      - uses: gittools/actions/gitversion/setup@v0.12
+        name: Install GitVersion
+        with:
+          versionSpec: '5.x'
+          includePrerelease: false
+      - uses: gittools/actions/gitversion/execute@v0.12
+        name: Use GitVersion
+        with:
+          useConfigFile: true
+          configFilePath: 'GitVersion_v5.yml'
+          additionalArguments: '/overrideconfig update-build-number=false'
+        id: version_step # step id used as reference for output values
+
+      - run: |
+          echo "Major      (env.major)                 : ${{ env.major }}"
+          echo "Minor      (env.minor)                 : ${{ env.minor }}"
+          echo "Patch      (env.patch)                 : ${{ env.patch }}"
+          echo "SemVer     (env.semVer)                : ${{ env.semVer }}"
+          echo "FullSemVer (env.fullSemVer)            : ${{ env.fullSemVer }}"
+        name: Display GitVersion variables (without prefix)
+
+      - run: |
+          echo "Major      (env.GitVersion_Major)      : ${{ env.GitVersion_Major }}"
+          echo "Minor      (env.GitVersion_Minor)      : ${{ env.GitVersion_Minor }}"
+          echo "Patch      (env.GitVersion_Patch)      : ${{ env.GitVersion_Patch }}"
+          echo "SemVer     (env.GitVersion_SemVer)     : ${{ env.GitVersion_SemVer }}"
+          echo "FullSemVer (env.GitVersion_FullSemVer) : ${{ env.GitVersion_FullSemVer }}"
+        name: Display GitVersion variables (with prefix)
+
+      - run: |
+          echo "Major      (steps.version_step.outputs.major)                 : ${{ steps.version_step.outputs.major }}"
+          echo "Minor      (steps.version_step.outputs.minor)                 : ${{ steps.version_step.outputs.minor }}"
+          echo "Patch      (steps.version_step.outputs.patch)                 : ${{ steps.version_step.outputs.patch }}"
+          echo "SemVer     (steps.version_step.outputs.semVer)                : ${{ steps.version_step.outputs.semVer }}"
+          echo "FullSemVer (steps.version_step.outputs.fullSemVer)            : ${{ steps.version_step.outputs.fullSemVer }}"
+        name: Display GitVersion outputs (step output without prefix)
+
+      - run: |
+          echo "Major      (steps.version_step.outputs.GitVersion_Major)      : ${{ steps.version_step.outputs.GitVersion_Major }}"
+          echo "Minor      (steps.version_step.outputs.GitVersion_Minor)      : ${{ steps.version_step.outputs.GitVersion_Minor }}"
+          echo "Patch      (steps.version_step.outputs.GitVersion_Patch)      : ${{ steps.version_step.outputs.GitVersion_Patch }}"
+          echo "SemVer     (steps.version_step.outputs.GitVersion_SemVer)     : ${{ steps.version_step.outputs.GitVersion_SemVer }}"
+          echo "FullSemVer (steps.version_step.outputs.GitVersion_FullSemVer) : ${{ steps.version_step.outputs.GitVersion_FullSemVer }}"
+        name: Display GitVersion outputs (step output with prefix)
+
+      - run: |
+          echo "Major      (env.myvar_major)                 : ${{ env.myvar_major }}"
+          echo "Minor      (env.myvar_minor)                 : ${{ env.myvar_minor }}"
+          echo "Patch      (env.myvar_patch)                 : ${{ env.myvar_patch }}"
+          echo "SemVer     (env.myvar_semVer)                : ${{ env.myvar_semVer }}"
+          echo "FullSemVer (env.myvar_fullSemVer)            : ${{ env.myvar_fullSemVer }}"
+        name: Display mapped local env (outputs without prefix)
+        env:
+          myvar_major: ${{ steps.version_step.outputs.major }}
+          myvar_minor: ${{ steps.version_step.outputs.minor }}
+          myvar_patch: ${{ steps.version_step.outputs.patch }}
+          myvar_semVer: ${{ steps.version_step.outputs.semVer }}
+          myvar_fullSemVer: ${{ steps.version_step.outputs.fullSemVer }}
+
+      - run: |
+          echo "Major      (env.myvar_GitVersion_Major)      : ${{ env.myvar_GitVersion_Major }}"
+          echo "Minor      (env.myvar_GitVersion_Minor)      : ${{ env.myvar_GitVersion_Minor }}"
+          echo "Patch      (env.myvar_GitVersion_Patch)      : ${{ env.myvar_GitVersion_Patch }}"
+          echo "SemVer     (env.myvar_GitVersion_SemVer)     : ${{ env.myvar_GitVersion_SemVer }}"
+          echo "FullSemVer (env.myvar_GitVersion_FullSemVer) : ${{ env.myvar_GitVersion_FullSemVer }}"
+        name: Display mapped local env (outputs with prefix)
+        env:
+          myvar_GitVersion_Major: ${{ steps.version_step.outputs.GitVersion_Major }}
+          myvar_GitVersion_Minor: ${{ steps.version_step.outputs.GitVersion_Minor }}
+          myvar_GitVersion_Patch: ${{ steps.version_step.outputs.GitVersion_Patch }}
+          myvar_GitVersion_SemVer: ${{ steps.version_step.outputs.GitVersion_SemVer }}
+          myvar_GitVersion_FullSemVer: ${{ steps.version_step.outputs.GitVersion_FullSemVer }}
+
+      - run: |
+          echo "Major      (env.myvar_major)                 : $env:myvar_major"
+          echo "Minor      (env.myvar_minor)                 : $env:myvar_minor"
+          echo "Patch      (env.myvar_patch)                 : $env:myvar_patch"
+          echo "SemVer     (env.myvar_semVer)                : $env:myvar_semVer"
+          echo "FullSemVer (env.myvar_fullSemVer)            : $env:myvar_fullSemVer"
+        name: Display mapped local env (pwsh - outputs without prefix)
+        shell: pwsh
+        env:
+          myvar_major: ${{ steps.version_step.outputs.major }}
+          myvar_minor: ${{ steps.version_step.outputs.minor }}
+          myvar_patch: ${{ steps.version_step.outputs.patch }}
+          myvar_semVer: ${{ steps.version_step.outputs.semVer }}
+          myvar_fullSemVer: ${{ steps.version_step.outputs.fullSemVer }}
+
+      - run: |
+          echo "Major      (env.myvar_GitVersion_Major)      : $env:myvar_GitVersion_Major"
+          echo "Minor      (env.myvar_GitVersion_Minor)      : $env:myvar_GitVersion_Minor"
+          echo "Patch      (env.myvar_GitVersion_Patch)      : $env:myvar_GitVersion_Patch"
+          echo "SemVer     (env.myvar_GitVersion_SemVer)     : $env:myvar_GitVersion_SemVer"
+          echo "FullSemVer (env.myvar_GitVersion_FullSemVer) : $env:myvar_GitVersion_FullSemVer"
+        name: Display mapped local env (pwsh - outputs with prefix)
+        shell: pwsh
+        env:
+          myvar_GitVersion_Major: ${{ steps.version_step.outputs.GitVersion_Major }}
+          myvar_GitVersion_Minor: ${{ steps.version_step.outputs.GitVersion_Minor }}
+          myvar_GitVersion_Patch: ${{ steps.version_step.outputs.GitVersion_Patch }}
+          myvar_GitVersion_SemVer: ${{ steps.version_step.outputs.GitVersion_SemVer }}
+          myvar_GitVersion_FullSemVer: ${{ steps.version_step.outputs.GitVersion_FullSemVer }}
+
+      - run: |
+          echo "Major      (myvar_major)                 : $myvar_major"
+          echo "Minor      (myvar_minor)                 : $myvar_minor"
+          echo "Patch      (myvar_patch)                 : $myvar_patch"
+          echo "SemVer     (myvar_semVer)                : $myvar_semVer"
+          echo "FullSemVer (myvar_fullSemVer)            : $myvar_fullSemVer"
+        name: Display mapped local env (bash - outputs without prefix)
+        shell: bash
+        env:
+          myvar_major: ${{ steps.version_step.outputs.major }}
+          myvar_minor: ${{ steps.version_step.outputs.minor }}
+          myvar_patch: ${{ steps.version_step.outputs.patch }}
+          myvar_semVer: ${{ steps.version_step.outputs.semVer }}
+          myvar_fullSemVer: ${{ steps.version_step.outputs.fullSemVer }}
+
+      - run: |
+          echo "Major      (myvar_GitVersion_Major)      : $myvar_GitVersion_Major"
+          echo "Minor      (myvar_GitVersion_Minor)      : $myvar_GitVersion_Minor"
+          echo "Patch      (myvar_GitVersion_Patch)      : $myvar_GitVersion_Patch"
+          echo "SemVer     (myvar_GitVersion_SemVer)     : $myvar_GitVersion_SemVer"
+          echo "FullSemVer (myvar_GitVersion_FullSemVer) : $myvar_GitVersion_FullSemVer"
+        name: Display mapped local env (bash - outputs with prefix)
+        shell: bash
+        env:
+          myvar_GitVersion_Major: ${{ steps.version_step.outputs.GitVersion_Major }}
+          myvar_GitVersion_Minor: ${{ steps.version_step.outputs.GitVersion_Minor }}
+          myvar_GitVersion_Patch: ${{ steps.version_step.outputs.GitVersion_Patch }}
+          myvar_GitVersion_SemVer: ${{ steps.version_step.outputs.GitVersion_SemVer }}
+          myvar_GitVersion_FullSemVer: ${{ steps.version_step.outputs.GitVersion_FullSemVer }}

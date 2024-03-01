@@ -25,12 +25,12 @@ jobs:
           useConfigFile: true
           configFilePath: 'GitVersion_v5.yml'
           additionalArguments: '/overrideconfig update-build-number=false'
-      id: gitversion # step id used as reference for output values
+      id: version_step # step id used as reference for output values
     - run: |
-        echo "FullSemVer (env.fullSemVer)                                 : ${{ env.fullSemVer }}"
-        echo "FullSemVer (env.GitVersion_FullSemVer)                      : ${{ env.GitVersion_FullSemVer }}"
-        echo "FullSemVer (steps.gitversion.outputs.fullSemVer)            : ${{ steps.gitversion.outputs.fullSemVer }}"
-        echo "FullSemVer (steps.gitversion.outputs.GitVersion_FullSemVer) : ${{ steps.gitversion.outputs.GitVersion_FullSemVer }}"
+        echo "FullSemVer (env.fullSemVer)                                   : ${{ env.fullSemVer }}"
+        echo "FullSemVer (env.GitVersion_FullSemVer)                        : ${{ env.GitVersion_FullSemVer }}"
+        echo "FullSemVer (steps.version_step.outputs.fullSemVer)            : ${{ steps.version_step.outputs.fullSemVer }}"
+        echo "FullSemVer (steps.version_step.outputs.GitVersion_FullSemVer) : ${{ steps.version_step.outputs.GitVersion_FullSemVer }}"
       name: Use variables and output
   GitVersion_v6:
     name: GitVersion v6
@@ -55,10 +55,10 @@ jobs:
           useConfigFile: true
           configFilePath: 'GitVersion_v6.yml'
           additionalArguments: '/overrideconfig update-build-number=false'
-        id: gitversion # step id used as reference for output values
+        id: version_step # step id used as reference for output values
       - run: |
-          echo "FullSemVer (env.fullSemVer)                                 : ${{ env.fullSemVer }}"
-          echo "FullSemVer (env.GitVersion_FullSemVer)                      : ${{ env.GitVersion_FullSemVer }}"
-          echo "FullSemVer (steps.gitversion.outputs.fullSemVer)            : ${{ steps.gitversion.outputs.fullSemVer }}"
-          echo "FullSemVer (steps.gitversion.outputs.GitVersion_FullSemVer) : ${{ steps.gitversion.outputs.GitVersion_FullSemVer }}"
+          echo "FullSemVer (env.fullSemVer)                                   : ${{ env.fullSemVer }}"
+          echo "FullSemVer (env.GitVersion_FullSemVer)                        : ${{ env.GitVersion_FullSemVer }}"
+          echo "FullSemVer (steps.version_step.outputs.fullSemVer)            : ${{ steps.version_step.outputs.fullSemVer }}"
+          echo "FullSemVer (steps.version_step.outputs.GitVersion_FullSemVer) : ${{ steps.version_step.outputs.GitVersion_FullSemVer }}"
         name: Use variables and output
