@@ -24,12 +24,12 @@ jobs:
       - name: Fetch all history for all tags and branches
         run: |
           git fetch --prune --unshallow
-      - uses: gittools/actions/gitversion/setup@v0.12.1
+      - uses: gittools/actions/gitversion/setup@v0.13.0
         name: Install GitVersion
         with:
           versionSpec: '5.x'
           includePrerelease: false
-      - uses: gittools/actions/gitversion/execute@v0.12.1
+      - uses: gittools/actions/gitversion/execute@v0.13.0
         name: Use GitVersion
         with:
           useConfigFile: true
