@@ -24,7 +24,8 @@ jobs:
       with:
           useConfigFile: true
           configFilePath: 'GitVersion_v5.yml'
-          additionalArguments: '/overrideconfig update-build-number=false'
+          overrideConfig: |
+            update-build-number=false
       id: version_step # step id used as reference for output values
     - run: |
         echo "FullSemVer (env.fullSemVer)                                   : ${{ env.fullSemVer }}"
@@ -54,7 +55,8 @@ jobs:
         with:
           useConfigFile: true
           configFilePath: 'GitVersion_v6.yml'
-          additionalArguments: '/overrideconfig update-build-number=false'
+          overrideConfig: |
+            update-build-number=false
         id: version_step # step id used as reference for output values
       - run: |
           echo "FullSemVer (env.fullSemVer)                                   : ${{ env.fullSemVer }}"
