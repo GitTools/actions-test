@@ -11,9 +11,8 @@ jobs:
       fail-fast: false
     steps:
       - uses: actions/checkout@v4
-      - name: Fetch all history for all tags and branches
-        run: |
-          git fetch --prune --unshallow
+        with:
+          fetch-depth: 0
       - uses: gittools/actions/gitversion/setup@v1.0.0
         name: Install GitVersion
         with:
