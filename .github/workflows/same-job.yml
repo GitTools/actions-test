@@ -2,8 +2,8 @@ name: same-job
 on: [ push, pull_request, workflow_dispatch ]
 
 jobs:
-  GitVersion_v5_same_job:
-    name: GitVersion v5 (same job)
+  GitVersion_v6_same_job:
+    name: GitVersion v6 (same job)
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -16,13 +16,13 @@ jobs:
       - uses: gittools/actions/gitversion/setup@v2.0.0
         name: Install GitVersion
         with:
-          versionSpec: '5.x'
+          versionSpec: '6.x'
           includePrerelease: false
       - uses: gittools/actions/gitversion/execute@v2.0.0
         name: Use GitVersion
         with:
           useConfigFile: true
-          configFilePath: 'GitVersion_v5.yml'
+          configFilePath: 'GitVersion_v6.yml'
           overrideConfig: |
             update-build-number=false
         id: version_step # step id used as reference for output values
