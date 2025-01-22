@@ -1,4 +1,4 @@
-function update-md-files()
+function update-ci-files()
 {
     param(
         [Parameter(Mandatory = $True, Position = 0, ValueFromPipeline = $true)]
