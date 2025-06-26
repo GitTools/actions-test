@@ -2,36 +2,6 @@ name: CI
 on: [push, pull_request, workflow_dispatch]
 
 jobs:
-  GitVersion_v5:
-    name: GitVersion v5
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ windows-2025, ubuntu-24.04, macos-15 ]
-      fail-fast: false
-    steps:
-    - uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
-    - uses: gittools/actions/gitversion/setup@v3.2.1
-      name: Install GitVersion
-      with:
-        versionSpec: '5.12.x'
-        includePrerelease: false
-    - uses: gittools/actions/gitversion/execute@v3.2.1
-      name: Use GitVersion
-      with:
-          useConfigFile: true
-          configFilePath: 'GitVersion_v5.yml'
-          overrideConfig: |
-            update-build-number=false
-      id: version_step # step id used as reference for output values
-    - run: |
-        echo "FullSemVer (env.fullSemVer)                                   : ${{ env.fullSemVer }}"
-        echo "FullSemVer (env.GitVersion_FullSemVer)                        : ${{ env.GitVersion_FullSemVer }}"
-        echo "FullSemVer (steps.version_step.outputs.fullSemVer)            : ${{ steps.version_step.outputs.fullSemVer }}"
-        echo "FullSemVer (steps.version_step.outputs.GitVersion_FullSemVer) : ${{ steps.version_step.outputs.GitVersion_FullSemVer }}"
-      name: Use variables and output
   GitVersion_v6:
     name: GitVersion v6
     runs-on: ${{ matrix.os }}
