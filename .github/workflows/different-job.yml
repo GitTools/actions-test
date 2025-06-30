@@ -31,7 +31,6 @@ jobs:
       - uses: gittools/actions/gitversion/execute@v4.0.0
         name: Use GitVersion
         with:
-          useConfigFile: true
           configFilePath: 'GitVersion_v6.yml'
           overrideConfig: |
             update-build-number=false
