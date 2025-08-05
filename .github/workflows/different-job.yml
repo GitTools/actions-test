@@ -34,7 +34,7 @@ jobs:
           configFilePath: 'GitVersion_v6.yml'
           overrideConfig: |
             update-build-number=false
-        id: version_step # step id used as reference for output values
+        id: version_step # step id used as a reference for output values
   
   Use_GitVersion_v6_without_prefix:
     name: Use Output from previous job (without prefix)

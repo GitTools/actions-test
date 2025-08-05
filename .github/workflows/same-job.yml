@@ -24,7 +24,7 @@ jobs:
           configFilePath: 'GitVersion_v6.yml'
           overrideConfig: |
             update-build-number=false
-        id: version_step # step id used as reference for output values
+        id: version_step # step id used as a reference for output values
 
       - run: |
           echo "Major      (env.major)                 : ${{ env.major }}"
