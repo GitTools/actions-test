@@ -33,7 +33,7 @@ jobs:
         with:
           configFilePath: 'GitVersion_v6.yml'
           overrideConfig: |
-            update-build-number=false
+            semantic-version-format=Loose
         id: version_step # step id used as a reference for output values
   
   Use_GitVersion_v6_without_prefix:
