@@ -10,7 +10,7 @@ jobs:
         os: [ windows-2025, ubuntu-24.04, macos-15 ]
       fail-fast: false
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
       - uses: gittools/actions/gitversion/setup@v4.1.0
