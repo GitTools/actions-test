@@ -14,13 +14,13 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: gittools/actions/gitversion/setup@v4.3.2
+      - uses: gittools/actions/gitversion/setup@v4.3.3
         name: Install GitVersion
         with:
           versionSpec: '6.x'
           includePrerelease: true
 
-      - uses: gittools/actions/gitversion/execute@v4.3.2
+      - uses: gittools/actions/gitversion/execute@v4.3.3
         name: Use GitVersion
         with:
           configFilePath: 'GitVersion_v6.yml'
