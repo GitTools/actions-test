@@ -20,7 +20,7 @@ jobs:
       GitVersion_SemVer: ${{ steps.version_step.outputs.GitVersion_SemVer }}
       GitVersion_FullSemVer: ${{ steps.version_step.outputs.GitVersion_FullSemVer }}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
