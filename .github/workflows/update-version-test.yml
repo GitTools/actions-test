@@ -10,13 +10,14 @@ defaults:
 
 jobs:
   update-examples-version:
-    permissions:
-      contents: write
     if: ${{ github.event_name == 'repository_dispatch' }}
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: gittools/cicd/checkout@v1
+        with:
+          op_service_account_token: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+          fetch-depth: 0
 
       - run: |
           $oldTag = "${{ github.event.client_payload.oldTag }}"
