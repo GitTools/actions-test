@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout
-        uses: gittools/cicd/checkout@v1
+        uses: gittools/cicd/checkout@v2
         with:
           op_service_account_token: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
           fetch-depth: 1
@@ -28,7 +28,7 @@ jobs:
           dir -r .azure\**\*.yml  | % { update-ci-files $_ -OldVersion $oldTag -NewVersion $newTag }
         name: Update examples version
 
-      - uses: gittools/cicd/git-commit-push@v1
+      - uses: gittools/cicd/git-commit-push@v2
         with:
           message: "update gittools.gittools version to ${{ github.event.client_payload.newTag }}"
         name: Push changes
