@@ -4,7 +4,7 @@ on: [ push, pull_request, workflow_dispatch ]
 jobs:
   GitVersion_v6_Job:
     name: GitVersion v6 Job
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     outputs:
       branchName: ${{ steps.version_step.outputs.branchName }}
       major: ${{ steps.version_step.outputs.major }}
@@ -40,7 +40,7 @@ jobs:
   
   Use_GitVersion_v6_without_prefix:
     name: Use Output from previous job (without prefix)
-    runs-on: windows-2025
+    runs-on: windows-2025-vs2026
     needs: [ GitVersion_v6_Job ]
     if: contains(needs.GitVersion_v6_Job.outputs['branchName'], 'main')
     env:
@@ -148,7 +148,7 @@ jobs:
 
   Use_GitVersion_v6_with_prefix:
     name: Use Output from previous job (with prefix)
-    runs-on: windows-2025
+    runs-on: windows-2025-vs2026
     needs: [ GitVersion_v6_Job ]
     if: contains(needs.GitVersion_v6_Job.outputs['GitVersion_BranchName'], 'main')
     env:
