@@ -2,8 +2,8 @@ name: different-job
 on: [ push, pull_request, workflow_dispatch ]
 
 jobs:
-  GitVersion_v6_Job:
-    name: GitVersion v6 Job
+  GitVersion_v7_Job:
+    name: GitVersion v7 Job
     runs-on: ubuntu-26.04
     outputs:
       branchName: ${{ steps.version_step.outputs.branchName }}
@@ -24,31 +24,31 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: gittools/actions/gitversion/setup@v4.7.2
+      - uses: gittools/actions/gitversion/setup@v5.0.0
         name: Install GitVersion
         with:
-          versionSpec: '6.x'
+          versionSpec: '7.0.x'
           includePrerelease: false
 
-      - uses: gittools/actions/gitversion/execute@v4.7.2
+      - uses: gittools/actions/gitversion/execute@v5.0.0
         name: Use GitVersion
         with:
-          configFilePath: 'GitVersion_v6.yml'
+          configFilePath: 'GitVersion_v7.yml'
           overrideConfig: |
-            semantic-version-format=Loose
+            calculation.semantic-version-format=Loose
         id: version_step # step id used as a reference for output values
   
-  Use_GitVersion_v6_without_prefix:
+  Use_GitVersion_v7_without_prefix:
     name: Use Output from previous job (without prefix)
     runs-on: windows-2025-vs2026
-    needs: [ GitVersion_v6_Job ]
-    if: contains(needs.GitVersion_v6_Job.outputs['branchName'], 'main')
+    needs: [ GitVersion_v7_Job ]
+    if: needs.GitVersion_v7_Job.outputs['branchName'] != ''
     env:
-      myvar_major: ${{ needs.GitVersion_v6_Job.outputs.major }}
-      myvar_minor: ${{ needs.GitVersion_v6_Job.outputs.minor }}
-      myvar_patch: ${{ needs.GitVersion_v6_Job.outputs.patch }}
-      myvar_semVer: ${{ needs.GitVersion_v6_Job.outputs.semVer }}
-      myvar_fullSemVer: ${{ needs.GitVersion_v6_Job.outputs.fullSemVer }}
+      myvar_major: ${{ needs.GitVersion_v7_Job.outputs.major }}
+      myvar_minor: ${{ needs.GitVersion_v7_Job.outputs.minor }}
+      myvar_patch: ${{ needs.GitVersion_v7_Job.outputs.patch }}
+      myvar_semVer: ${{ needs.GitVersion_v7_Job.outputs.semVer }}
+      myvar_fullSemVer: ${{ needs.GitVersion_v7_Job.outputs.fullSemVer }}
     steps:
       - run: |
           echo "Major      (env:myvar_major)        : $env:myvar_major"
@@ -68,11 +68,11 @@ jobs:
         name: Use local env mapped from output (pwsh - outputs without prefix)
         shell: pwsh
         env:
-          localvar_major: ${{ needs.GitVersion_v6_Job.outputs.major }}
-          localvar_minor: ${{ needs.GitVersion_v6_Job.outputs.minor }}
-          localvar_patch: ${{ needs.GitVersion_v6_Job.outputs.patch }}
-          localvar_semVer: ${{ needs.GitVersion_v6_Job.outputs.semVer }}
-          localvar_fullSemVer: ${{ needs.GitVersion_v6_Job.outputs.fullSemVer }}
+          localvar_major: ${{ needs.GitVersion_v7_Job.outputs.major }}
+          localvar_minor: ${{ needs.GitVersion_v7_Job.outputs.minor }}
+          localvar_patch: ${{ needs.GitVersion_v7_Job.outputs.patch }}
+          localvar_semVer: ${{ needs.GitVersion_v7_Job.outputs.semVer }}
+          localvar_fullSemVer: ${{ needs.GitVersion_v7_Job.outputs.fullSemVer }}
 
       - run: |
           echo "Major      (env:localvar_major)        : $env:localvar_major"
@@ -90,11 +90,11 @@ jobs:
           localvar_fullSemVer: ${{ env.myvar_fullSemVer }}
 
       - run: |
-          echo "Major      (needs.GitVersion_v6_Job.outputs.major)      : ${{ needs.GitVersion_v6_Job.outputs.major }}"
-          echo "Minor      (needs.GitVersion_v6_Job.outputs.minor)      : ${{ needs.GitVersion_v6_Job.outputs.minor }}"
-          echo "Patch      (needs.GitVersion_v6_Job.outputs.patch)      : ${{ needs.GitVersion_v6_Job.outputs.patch }}"
-          echo "SemVer     (needs.GitVersion_v6_Job.outputs.semVer)     : ${{ needs.GitVersion_v6_Job.outputs.semVer }}"
-          echo "FullSemVer (needs.GitVersion_v6_Job.outputs.fullSemVer) : ${{ needs.GitVersion_v6_Job.outputs.fullSemVer }}"
+          echo "Major      (needs.GitVersion_v7_Job.outputs.major)      : ${{ needs.GitVersion_v7_Job.outputs.major }}"
+          echo "Minor      (needs.GitVersion_v7_Job.outputs.minor)      : ${{ needs.GitVersion_v7_Job.outputs.minor }}"
+          echo "Patch      (needs.GitVersion_v7_Job.outputs.patch)      : ${{ needs.GitVersion_v7_Job.outputs.patch }}"
+          echo "SemVer     (needs.GitVersion_v7_Job.outputs.semVer)     : ${{ needs.GitVersion_v7_Job.outputs.semVer }}"
+          echo "FullSemVer (needs.GitVersion_v7_Job.outputs.fullSemVer) : ${{ needs.GitVersion_v7_Job.outputs.fullSemVer }}"
         name: Use direct output from previous job (pwsh - outputs without prefix)
         shell: pwsh
 
@@ -116,11 +116,11 @@ jobs:
         name: Use local env mapped from output (bash - outputs without prefix)
         shell: bash
         env:
-          localvar_major: ${{ needs.GitVersion_v6_Job.outputs.major }}
-          localvar_minor: ${{ needs.GitVersion_v6_Job.outputs.minor }}
-          localvar_patch: ${{ needs.GitVersion_v6_Job.outputs.patch }}
-          localvar_semVer: ${{ needs.GitVersion_v6_Job.outputs.semVer }}
-          localvar_fullSemVer: ${{ needs.GitVersion_v6_Job.outputs.fullSemVer }}
+          localvar_major: ${{ needs.GitVersion_v7_Job.outputs.major }}
+          localvar_minor: ${{ needs.GitVersion_v7_Job.outputs.minor }}
+          localvar_patch: ${{ needs.GitVersion_v7_Job.outputs.patch }}
+          localvar_semVer: ${{ needs.GitVersion_v7_Job.outputs.semVer }}
+          localvar_fullSemVer: ${{ needs.GitVersion_v7_Job.outputs.fullSemVer }}
 
       - run: |
           echo "Major      (localvar_major)        : $localvar_major"
@@ -138,25 +138,25 @@ jobs:
           localvar_fullSemVer: ${{ env.myvar_fullSemVer }}
 
       - run: |
-          echo "Major      (needs.GitVersion_v6_Job.outputs.major)      : ${{ needs.GitVersion_v6_Job.outputs.major }}"
-          echo "Minor      (needs.GitVersion_v6_Job.outputs.minor)      : ${{ needs.GitVersion_v6_Job.outputs.minor }}"
-          echo "Patch      (needs.GitVersion_v6_Job.outputs.patch)      : ${{ needs.GitVersion_v6_Job.outputs.patch }}"
-          echo "SemVer     (needs.GitVersion_v6_Job.outputs.semVer)     : ${{ needs.GitVersion_v6_Job.outputs.semVer }}"
-          echo "FullSemVer (needs.GitVersion_v6_Job.outputs.fullSemVer) : ${{ needs.GitVersion_v6_Job.outputs.fullSemVer }}"
+          echo "Major      (needs.GitVersion_v7_Job.outputs.major)      : ${{ needs.GitVersion_v7_Job.outputs.major }}"
+          echo "Minor      (needs.GitVersion_v7_Job.outputs.minor)      : ${{ needs.GitVersion_v7_Job.outputs.minor }}"
+          echo "Patch      (needs.GitVersion_v7_Job.outputs.patch)      : ${{ needs.GitVersion_v7_Job.outputs.patch }}"
+          echo "SemVer     (needs.GitVersion_v7_Job.outputs.semVer)     : ${{ needs.GitVersion_v7_Job.outputs.semVer }}"
+          echo "FullSemVer (needs.GitVersion_v7_Job.outputs.fullSemVer) : ${{ needs.GitVersion_v7_Job.outputs.fullSemVer }}"
         name: Use direct output from previous job (bash - outputs without prefix)
         shell: bash
 
-  Use_GitVersion_v6_with_prefix:
+  Use_GitVersion_v7_with_prefix:
     name: Use Output from previous job (with prefix)
     runs-on: windows-2025-vs2026
-    needs: [ GitVersion_v6_Job ]
-    if: contains(needs.GitVersion_v6_Job.outputs['GitVersion_BranchName'], 'main')
+    needs: [ GitVersion_v7_Job ]
+    if: needs.GitVersion_v7_Job.outputs['GitVersion_BranchName'] != ''
     env:
-      myvar_GitVersion_Major: ${{ needs.GitVersion_v6_Job.outputs.GitVersion_Major }}
-      myvar_GitVersion_Minor: ${{ needs.GitVersion_v6_Job.outputs.GitVersion_Minor }}
-      myvar_GitVersion_Patch: ${{ needs.GitVersion_v6_Job.outputs.GitVersion_Patch }}
-      myvar_GitVersion_SemVer: ${{ needs.GitVersion_v6_Job.outputs.GitVersion_SemVer }}
-      myvar_GitVersion_FullSemVer: ${{ needs.GitVersion_v6_Job.outputs.GitVersion_FullSemVer }}
+      myvar_GitVersion_Major: ${{ needs.GitVersion_v7_Job.outputs.GitVersion_Major }}
+      myvar_GitVersion_Minor: ${{ needs.GitVersion_v7_Job.outputs.GitVersion_Minor }}
+      myvar_GitVersion_Patch: ${{ needs.GitVersion_v7_Job.outputs.GitVersion_Patch }}
+      myvar_GitVersion_SemVer: ${{ needs.GitVersion_v7_Job.outputs.GitVersion_SemVer }}
+      myvar_GitVersion_FullSemVer: ${{ needs.GitVersion_v7_Job.outputs.GitVersion_FullSemVer }}
     steps:
       - run: |
           echo "Major      (env:myvar_GitVersion_Major)        : $env:myvar_GitVersion_Major"
@@ -176,11 +176,11 @@ jobs:
         name: Use local env mapped from output (pwsh - outputs with prefix)
         shell: pwsh
         env:
-          localvar_major: ${{ needs.GitVersion_v6_Job.outputs.GitVersion_Major }}
-          localvar_minor: ${{ needs.GitVersion_v6_Job.outputs.GitVersion_Minor }}
-          localvar_patch: ${{ needs.GitVersion_v6_Job.outputs.GitVersion_Patch }}
-          localvar_semVer: ${{ needs.GitVersion_v6_Job.outputs.GitVersion_SemVer }}
-          localvar_fullSemVer: ${{ needs.GitVersion_v6_Job.outputs.GitVersion_FullSemVer }}
+          localvar_major: ${{ needs.GitVersion_v7_Job.outputs.GitVersion_Major }}
+          localvar_minor: ${{ needs.GitVersion_v7_Job.outputs.GitVersion_Minor }}
+          localvar_patch: ${{ needs.GitVersion_v7_Job.outputs.GitVersion_Patch }}
+          localvar_semVer: ${{ needs.GitVersion_v7_Job.outputs.GitVersion_SemVer }}
+          localvar_fullSemVer: ${{ needs.GitVersion_v7_Job.outputs.GitVersion_FullSemVer }}
 
       - run: |
           echo "Major      (env:localvar_major)        : $env:localvar_major"
@@ -198,11 +198,11 @@ jobs:
           localvar_fullSemVer: ${{ env.myvar_GitVersion_FullSemVer }}
 
       - run: |
-          echo "Major      (needs.GitVersion_v6_Job.outputs.GitVersion_Major)      : ${{ needs.GitVersion_v6_Job.outputs.GitVersion_Major }}"
-          echo "Minor      (needs.GitVersion_v6_Job.outputs.GitVersion_Minor)      : ${{ needs.GitVersion_v6_Job.outputs.GitVersion_Minor }}"
-          echo "Patch      (needs.GitVersion_v6_Job.outputs.GitVersion_Patch)      : ${{ needs.GitVersion_v6_Job.outputs.GitVersion_Patch }}"
-          echo "SemVer     (needs.GitVersion_v6_Job.outputs.GitVersion_SemVer)     : ${{ needs.GitVersion_v6_Job.outputs.GitVersion_SemVer }}"
-          echo "FullSemVer (needs.GitVersion_v6_Job.outputs.GitVersion_FullSemVer) : ${{ needs.GitVersion_v6_Job.outputs.GitVersion_FullSemVer }}"
+          echo "Major      (needs.GitVersion_v7_Job.outputs.GitVersion_Major)      : ${{ needs.GitVersion_v7_Job.outputs.GitVersion_Major }}"
+          echo "Minor      (needs.GitVersion_v7_Job.outputs.GitVersion_Minor)      : ${{ needs.GitVersion_v7_Job.outputs.GitVersion_Minor }}"
+          echo "Patch      (needs.GitVersion_v7_Job.outputs.GitVersion_Patch)      : ${{ needs.GitVersion_v7_Job.outputs.GitVersion_Patch }}"
+          echo "SemVer     (needs.GitVersion_v7_Job.outputs.GitVersion_SemVer)     : ${{ needs.GitVersion_v7_Job.outputs.GitVersion_SemVer }}"
+          echo "FullSemVer (needs.GitVersion_v7_Job.outputs.GitVersion_FullSemVer) : ${{ needs.GitVersion_v7_Job.outputs.GitVersion_FullSemVer }}"
         name: Use direct output from previous job (pwsh - outputs with prefix)
         shell: pwsh
 
@@ -224,11 +224,11 @@ jobs:
         name: Use local env mapped from output (bash - outputs with prefix)
         shell: bash
         env:
-          localvar_major: ${{ needs.GitVersion_v6_Job.outputs.GitVersion_Major }}
-          localvar_minor: ${{ needs.GitVersion_v6_Job.outputs.GitVersion_Minor }}
-          localvar_patch: ${{ needs.GitVersion_v6_Job.outputs.GitVersion_Patch }}
-          localvar_semVer: ${{ needs.GitVersion_v6_Job.outputs.GitVersion_SemVer }}
-          localvar_fullSemVer: ${{ needs.GitVersion_v6_Job.outputs.GitVersion_FullSemVer }}
+          localvar_major: ${{ needs.GitVersion_v7_Job.outputs.GitVersion_Major }}
+          localvar_minor: ${{ needs.GitVersion_v7_Job.outputs.GitVersion_Minor }}
+          localvar_patch: ${{ needs.GitVersion_v7_Job.outputs.GitVersion_Patch }}
+          localvar_semVer: ${{ needs.GitVersion_v7_Job.outputs.GitVersion_SemVer }}
+          localvar_fullSemVer: ${{ needs.GitVersion_v7_Job.outputs.GitVersion_FullSemVer }}
 
       - run: |
           echo "Major      (localvar_major)        : $localvar_major"
@@ -246,10 +246,10 @@ jobs:
           localvar_fullSemVer: ${{ env.myvar_GitVersion_FullSemVer }}
 
       - run: |
-          echo "Major      (needs.GitVersion_v6_Job.outputs.GitVersion_Major)      : ${{ needs.GitVersion_v6_Job.outputs.GitVersion_Major }}"
-          echo "Minor      (needs.GitVersion_v6_Job.outputs.GitVersion_Minor)      : ${{ needs.GitVersion_v6_Job.outputs.GitVersion_Minor }}"
-          echo "Patch      (needs.GitVersion_v6_Job.outputs.GitVersion_Patch)      : ${{ needs.GitVersion_v6_Job.outputs.GitVersion_Patch }}"
-          echo "SemVer     (needs.GitVersion_v6_Job.outputs.GitVersion_SemVer)     : ${{ needs.GitVersion_v6_Job.outputs.GitVersion_SemVer }}"
-          echo "FullSemVer (needs.GitVersion_v6_Job.outputs.GitVersion_FullSemVer) : ${{ needs.GitVersion_v6_Job.outputs.GitVersion_FullSemVer }}"
+          echo "Major      (needs.GitVersion_v7_Job.outputs.GitVersion_Major)      : ${{ needs.GitVersion_v7_Job.outputs.GitVersion_Major }}"
+          echo "Minor      (needs.GitVersion_v7_Job.outputs.GitVersion_Minor)      : ${{ needs.GitVersion_v7_Job.outputs.GitVersion_Minor }}"
+          echo "Patch      (needs.GitVersion_v7_Job.outputs.GitVersion_Patch)      : ${{ needs.GitVersion_v7_Job.outputs.GitVersion_Patch }}"
+          echo "SemVer     (needs.GitVersion_v7_Job.outputs.GitVersion_SemVer)     : ${{ needs.GitVersion_v7_Job.outputs.GitVersion_SemVer }}"
+          echo "FullSemVer (needs.GitVersion_v7_Job.outputs.GitVersion_FullSemVer) : ${{ needs.GitVersion_v7_Job.outputs.GitVersion_FullSemVer }}"
         name: Use direct output from previous job (bash - outputs with prefix)
         shell: bash
