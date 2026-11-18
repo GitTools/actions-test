@@ -2,8 +2,8 @@ name: CI
 on: [ push, pull_request, workflow_dispatch ]
 
 jobs:
-  GitVersion_v6:
-    name: GitVersion v6
+  GitVersion_v7:
+    name: GitVersion v7
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -14,18 +14,18 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: gittools/actions/gitversion/setup@v4.7.2
+      - uses: gittools/actions/gitversion/setup@v5.0.0
         name: Install GitVersion
         with:
-          versionSpec: '6.x'
+          versionSpec: '7.0.x'
           includePrerelease: true
 
-      - uses: gittools/actions/gitversion/execute@v4.7.2
+      - uses: gittools/actions/gitversion/execute@v5.0.0
         name: Use GitVersion
         with:
-          configFilePath: 'GitVersion_v6.yml'
+          configFilePath: 'GitVersion_v7.yml'
           overrideConfig: |
-            semantic-version-format=Loose
+            calculation.semantic-version-format=Loose
         id: version_step # step id used as a reference for output values
 
       - run: |
