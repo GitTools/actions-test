@@ -1,0 +1,6 @@
+calculation:
+  branches:
+    main:
+      label: beta
+output:
+  assembly-versioning-scheme: MajorMinorPatch
